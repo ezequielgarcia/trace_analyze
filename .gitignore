@@ -1,0 +1,7 @@
+*.png
+*.txt
+*.log
+.vim/
+.vimrc
+db
+.tmp
