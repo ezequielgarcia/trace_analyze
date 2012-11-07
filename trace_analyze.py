@@ -653,7 +653,7 @@ def main():
                       dest="order_by",
                       default="current_dynamic",
                       help="attribute to order account \
-                            [current_dynamic, total_dynamic, alloc_count, waste]")
+                            [current_dynamic, total_dynamic, alloc_count, free_count, waste]")
 
 
     (opts, args) = parser.parse_args()
