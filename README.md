@@ -220,3 +220,26 @@ and previous account files, we find this is the real caller:
     2161     1184     2161   148/0     kobject_set_name_vargs
 
 So, we've accurately tracked this allocation down to the kobject code.
+
+## Using a DB file to speed-up multiple runs
+
+You may find yourself analyzing a large kmem log file. Probably, you want to run the script
+several times to get different kinds of results.
+
+The script is not very clever and will re-read the long kmem file on each run.
+To alleviate this problem you can have trace_analyze.py create a so-called DB file,
+and use this file instead of the kmem log file on subsequent runs.
+
+This is done using the --save-db and --db-file parameters. Like this
+
+    $ ./trace_analyze.py -k ../torvalds/ -f kmem.log --save-db db
+
+Notice you should create the DB file without any filters, like --malloc or --start-branch,
+in order to save the full kmem event log.
+
+Once you have the **db** file created, you would use it on each run
+
+    $ ./trace_analyze.py -k ../torvalds/ --db-file db -r rings.png -c account.txt
+
+Hopefully, this would prevent you from cursing trace_analyze for being so slow.
+
