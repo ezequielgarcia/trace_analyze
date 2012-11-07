@@ -11,6 +11,11 @@ subsequent runs of the script.
 This script and work related has been done thanks to the CEWG project [Kernel dynamic memory allocation tracking and reduction](http://elinux.org/Kernel_dynamic_memory_allocation_tracking_and_reduction).
 You can find lot more information about this script and about kernel dynamic memory tracking [here](http://elinux.org/Kernel_dynamic_memory_analysis)
 
+### Feedback
+
+trace_analyze.py is not stable, so expect some roughness. Testing and feedback is welcome.
+If you have any questions, feedback or praises to make, just open a github issue.
+
 ## Using trace_analyze.py for static analysis
 
 Usage is fairly simple
