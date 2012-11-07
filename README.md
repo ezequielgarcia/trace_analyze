@@ -14,6 +14,7 @@ You can find lot more information about this script and about kernel dynamic mem
 ### Feedback
 
 trace_analyze.py is not stable, so expect some roughness. Testing and feedback is welcome.
+
 If you have any questions, feedback or praises to make, just open a github issue.
 
 ## Using trace_analyze.py for static analysis
