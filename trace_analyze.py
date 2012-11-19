@@ -147,12 +147,12 @@ This will produce an account file like this:
 
 2.3. Controlling account output
 
-You can tell the script to read only kmalloc events
+You can ask the script to read only kmalloc events
 (notice the option name is *--malloc*):
 
     $ ./trace_analyze.py -k linux -f kmem.log -c account.txt --malloc
 
-Or you can tell the script to read only kmem_cache events:
+Or you can ask the script to read only kmem_cache events:
 
     $ ./trace_analyze.py -k linux -f kmem.log -c account.txt --cache
    
