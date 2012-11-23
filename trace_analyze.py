@@ -1,18 +1,9 @@
 #!/usr/bin/env python
-#
-# Copyright (C) 2012 Ezequiel Garcia <elezegarcia@gmail.com>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2
-# as published by the Free Software Foundation.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
 
 """
+Copyright (C) 2012 Ezequiel Garcia <elezegarcia@gmail.com>
+Licensed under the terms of the GNU GPL License version 2
+
 trace_analize.py
 ----------------
 
@@ -26,7 +17,7 @@ In addition, it can also report on static footprint on a built kernel tree.
 trace_analyze.py typically needs access to:
 1) a built kernel tree and, 2) an ftrace kmem log.
 
-ince reading the kmem event log is a costly operation,
+Since reading the kmem event log is a costly operation,
 you can also generate a 'db' file to speed-up subsequent runs of the script.
 
 This script and work related has been done thanks to the CEWG project
@@ -72,7 +63,7 @@ perform a 'readelf --syms' to get a list of symbols contained in it. Nothing fan
 2. Using trace_analyze.py for dynamic analysis
 ----------------------------------------------
 
-2.1. Producing a kmem trace log file 
+2.1. Producing a kmem trace log file
 
 In case you don't know or don't remember how to use ftrace to
 produce kmem events, here's a little remainder.
@@ -103,7 +94,7 @@ Of course some early traces will be lost, see below.
 
     # To stop tracing
     $ echo "0" > /sys/kernel/debug/tracing/tracing_on
-    # Dump 
+    # Dump
     $ cat /sys/kernel/debug/tracing/trace > kmem.log
 
 Now you need to get this file so you can post-process
@@ -135,7 +126,7 @@ This will produce an account file like this:
     number of allocs:              7649
     number of frees:               2563
     number of callers:              115
-     
+
      total    waste      net alloc/free  caller
     ---------------------------------------------
     299200        0   298928  1100/1     alloc_inode+0x4fL
@@ -155,12 +146,11 @@ You can ask the script to read only kmalloc events
 Or you can ask the script to read only kmem_cache events:
 
     $ ./trace_analyze.py -k linux -f kmem.log -c account.txt --cache
-   
+
 If you want to order the account file you can use --order-by (-o):
 
     $ ./trace_analyze.py -k linux -f kmem.log -c account.txt --order-by=waste
     $ ./trace_analyze.py -k linux -f kmem.log -c account.txt --malloc -o waste
-
 The possible options for order-by parameter are:
 
 * total_dynamic: Added allocations size
@@ -244,9 +234,9 @@ like this
     char *kvasprintf(gfp_t gfp, const char *fmt, va_list ap)
     {
    	   /* code removed */
-	   p = kmalloc(len+1, gfp); 
+	   p = kmalloc(len+1, gfp);
 
-And trace_analyze produces the account file 
+And trace_analyze produces the account file
 
     total    waste      net alloc/free  caller
     ---------------------------------------------
