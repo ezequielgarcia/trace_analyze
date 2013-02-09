@@ -404,7 +404,7 @@ class SymbolMap:
             if addr >= guess_addr:
                 lower = guess_index
 
-        offset = hex(addr-self.flist[lower][0])
+        offset = addr-self.flist[lower][0]
         name = self.flist[lower][1]
         if name.startswith("."):
             name = name[1:]
@@ -456,7 +456,7 @@ class EventDB:
             m = re.match(alloc_re, line)
             if m:
                 (fun, offset) = sym.lookup(m.group(1))
-                self.add_malloc("{}+{}".format(fun, offset),
+                self.add_malloc("{}+0x{:x}".format(fun, offset),
                                   m.group(2),
                                   int(m.group(3)),
                                   int(m.group(4)), line)
