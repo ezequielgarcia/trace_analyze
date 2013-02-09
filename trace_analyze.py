@@ -867,8 +867,8 @@ def main():
     parser = OptionParser()
     parser.add_option("-k", "--kernel",
                       dest="buildpath",
-                      default="",
-                      help="path to built kernel tree")
+                      default=".",
+                      help="path to built kernel tree (default is current dir)")
 
     parser.add_option("-f", "--file",
                       dest="file",
@@ -1191,7 +1191,11 @@ def visualize_mem_tree(tree, size_attr, filename, show):
     annotations = []
     labels = []
 
-    text = "{} {}".format(tree.name,
+    name = tree.name
+    if name == '.':
+        name = "/"
+
+    text = "{} {}".format(name,
                           human_bytes(getattr(tree.size(), size_attr)()))
     ann = ax.annotate(text,
                       size=12,
