@@ -998,7 +998,8 @@ def main():
 
     if len(opts.callers_file) == 0 and \
        len(opts.account_file) == 0 and \
-       len(opts.rings_file) == 0:
+       len(opts.rings_file) == 0 and \
+       opts.rings_show is False:
             sys.exit(0)
 
     root_path = "{}/{}".format(buildpath, opts.start_branch).rstrip("/")
