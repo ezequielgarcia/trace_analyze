@@ -364,7 +364,7 @@ class SymbolMap:
         try:
             f = open(filemap)
         except:
-            print "[ERROR] Cannot read symbol map file {}".format(filemap)
+            print("[ERROR] Cannot read symbol map file {}".format(filemap))
             sys.exit(1)
 
         for line in f.readlines():
@@ -423,13 +423,13 @@ class EventDB:
         self.num_lost_frees = 0
 
     def slurp(self, path, buildpath, do_malloc, do_cache):
-        print "Reading symbol map at {}".format(buildpath)
+        print("Reading symbol map at {}".format(buildpath))
         sym = SymbolMap(buildpath + "/System.map")
 
         try:
             logfile = open(path)
         except:
-            print "[ERROR] Cannot read log file {}".format(path)
+            print("[ERROR] Cannot read log file {}".format(path))
             sys.exit(1)
 
         kmalloc_re = r".*kmalloc.*call_site=([a-f0-9]+).*ptr=([a-f0-9]+).*bytes_req=([0-9]+)\s*bytes_alloc=([0-9]+)"
@@ -440,15 +440,15 @@ class EventDB:
         both_free_re = r".*k.*free.*call_site=[a-f0-9+]+.*ptr=([a-f0-9]+)"
 
         if do_malloc is True and do_cache is None:
-            print "Slurping event log, kmalloc events only"
+            print("Slurping event log, kmalloc events only")
             alloc_re = kmalloc_re
             free_re = kfree_re
         elif do_malloc is None and do_cache is True:
-            print "Slurping event log, kmem_cache events only"
+            print("Slurping event log, kmem_cache events only")
             alloc_re = cache_alloc_re
             free_re = cache_free_re
         else:
-            print "Slurping event log"
+            print("Slurping event log")
             alloc_re = both_alloc_re
             free_re = both_free_re
 
@@ -771,7 +771,7 @@ class MemTreeNode:
             m = re.match(r".*\s([0-9]+)\sFUNC.*\s+([a-zA-Z0-9_\.]+)\b", line)
             if m:
                 if m.group(2) in child.text:
-                    print "Duplicate text entry! {}".format(m.group(2))
+                    print("Duplicate text entry! {}".format(m.group(2)))
                 child.text[m.group(2)] = int(m.group(1))
 
                 # Search every callsite in db matching this name
@@ -782,7 +782,7 @@ class MemTreeNode:
             m = re.match(r".*\s([0-9]+)\sOBJECT.*\s+([a-zA-Z0-9_\.]+)\b", line)
             if m:
                 if m.group(2) in child.data:
-                    print "[WARNING] Duplicate data entry! {}".format(m.group(2))
+                    print("[WARNING] Duplicate data entry! {}".format(m.group(2)))
                 child.data[m.group(2)] = int(m.group(1))
 
     # This is deprecated, fill_per_file should be used instead.
@@ -790,7 +790,7 @@ class MemTreeNode:
     def fill_per_dir(self, path):
 
         if self.funcs or self.data:
-            print "[WARNING] Oooops, already filled"
+            print("[WARNING] Oooops, already filled")
 
         filepath = "." + self.full_name() + "/built-in.o"
 
@@ -807,7 +807,7 @@ class MemTreeNode:
             m = re.match(r".*FUNC.*\b([a-zA-Z0-9_]+)\b", line)
             if m:
                 if m.group(1) in self.funcs:
-                    print "[WARNING] Duplicate entry! {}".format(m.group(1))
+                    print("[WARNING] Duplicate entry! {}".format(m.group(1)))
 
                 if m.group(1) in self.db.f:
                     self.funcs[m.group(1)] = self.db.f[m.group(1)]
@@ -938,20 +938,20 @@ def main():
     # Kernel build path is a mandatory parameter.
     # We need to look at compiled objects and also for System.map.
     if len(opts.db_file) == 0 and len(opts.buildpath) == 0:
-        print "Please set a kernel build path or a DB file!"
+        print("Please set a kernel build path or a DB file!")
         parser.print_help()
         return
 
     # Check valid options
     if len(opts.order_by) > 0:
         if opts.order_by not in dir(Callsite):
-            print "Hey! {} is not a valid --order-by option".format(opts.order_by)
+            print("Hey! {} is not a valid --order-by option".format(opts.order_by))
             parser.print_help()
             return
 
     if len(opts.rings_attr) > 0:
         if opts.rings_attr not in dir(MemTreeNodeSize):
-            print "Hey! {} is not a valid --rings-attr option".format(opts.rings_attr)
+            print("Hey! {} is not a valid --rings-attr option".format(opts.rings_attr))
             parser.print_help()
             return
 
@@ -962,7 +962,7 @@ def main():
     # and we don't have a DB file
     # then we'll fallback to static report mode.
     if len(opts.db_file) == 0 and len(opts.file) == 0:
-        print "No trace log file or DB file specified: will report on static size only"
+        print("No trace log file or DB file specified: will report on static size only")
         opts.rings_attr = "static"
         opts.do_malloc = False
         opts.do_cache = False
@@ -981,7 +981,7 @@ def main():
     # Get root database, if need to
     if not opts.just_static:
         if len(opts.db_file) != 0:
-            print "Using db file '{}'".format(opts.db_file)
+            print("Using db file '{}'".format(opts.db_file))
             f = open(opts.db_file)
             buildpath = pickle.load(f)
             rootDB = pickle.load(f)
@@ -990,7 +990,7 @@ def main():
             rootDB.slurp(opts.file, buildpath, opts.do_malloc, opts.do_cache)
 
             if len (opts.save_db_file) != 0:
-                print "Saving db file at '{}'".format(opts.save_db_file)
+                print("Saving db file at '{}'".format(opts.save_db_file))
                 f = open(opts.save_db_file, 'w')
                 pickle.dump(buildpath,f)
                 pickle.dump(rootDB, f)
@@ -1003,7 +1003,7 @@ def main():
 
     root_path = "{}/{}".format(buildpath, opts.start_branch).rstrip("/")
 
-    print "Creating tree from compiled symbols at '{}'".format(root_path)
+    print("Creating tree from compiled symbols at '{}'".format(root_path))
 
     # We need to specify if user provided buildpath is absolute
     MemTreeNode.abs_slash = buildpath.startswith("/") and "/" or ""
@@ -1011,28 +1011,28 @@ def main():
     tree = MemTreeNode(db = rootDB)
     tree.add_path(root_path)
 
-    print "Cleaning tree"
+    print("Cleaning tree")
     tree = tree.get_clean()
 
     # DEBUG--ONLY. Should we add an option for this?
     #print(tree.treelike2(attr = opts.rings_attr))
     if len(opts.callers_file) != 0:
-        print "Creating callers file at '{}'".format(opts.callers_file)
+        print("Creating callers file at '{}'".format(opts.callers_file))
         rootDB.print_callers(opts.callers_file,
                              tree)
 
 
     if len(opts.account_file) != 0:
-        print "Creating account file at '{}'".format(opts.account_file)
+        print("Creating account file at '{}'".format(opts.account_file))
         rootDB.print_account(opts.account_file,
                              opts.order_by,
                              tree)
 
     if len(opts.rings_file) != 0:
         if tree is None:
-            print "Sorry, there is nothing to plot for branch '{}'".format(opts.start_branch)
+            print("Sorry, there is nothing to plot for branch '{}'".format(opts.start_branch))
         else:
-            print "Creating ringchart for attribute '{}'".format(opts.rings_attr)
+            print("Creating ringchart for attribute '{}'".format(opts.rings_attr))
             visualize_mem_tree(tree, opts.rings_attr, opts.rings_file, opts.rings_show)
 
 
@@ -1158,7 +1158,7 @@ def create_child_rings(tree, level=2, level_angle=360, start_angle=0, rings=[],
 
     # Just a check
     if child_size > max_size:
-        print "[{}] Ooops, child size is greater than max size".format(name)
+        print("[{}] Ooops, child size is greater than max size".format(name))
 
     for name, section in sections.items():
 
